@@ -6,7 +6,6 @@ public:
     AlienDetector() = default;
     ~AlienDetector() = default;
 
-
     void appear() {
         signal_alert.emit("Alien is in the carpark !!!!");
     }
@@ -25,8 +24,6 @@ public:
 
     sigc::signal<std::string(std::string)> signal_waring;
 };
-
-
 
 class People {
 public:
