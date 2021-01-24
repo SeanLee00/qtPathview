@@ -1,0 +1,19 @@
+<node>
+  <interface name="net.Makersweb.Media.Playback">
+    <method name="Play">
+      <arg name="index" direction="in" type="i"/>
+    </method>
+
+    <method name="Pause"></method>
+
+    <method name="Prev"></method>
+
+    <method name="Next"></method>
+
+    <signal name="PlaybackStateChanged">
+      <arg name="state" type="i"/>
+    </signal>
+
+    <property name="CurrentTrack" type="i" access="read"/>
+  </interface>
+</node>
