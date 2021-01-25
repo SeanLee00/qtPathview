@@ -18,22 +18,6 @@ public:
         m_signal_alert.emit("Alien is in the carpark !!!!");
     }
 
-    sigc::signal<void(std::string)>& getConnector(ConnectorType type) {
-        switch(type)
-        {
-        case ConnectorType::TYPE_1:
-            return m_signal_alert;
-            break;
-        case ConnectorType::TYPE_2:
-            return m_signal_alert;
-            break;
-        case ConnectorType::TYPE_3:
-            return m_signal_alert;
-            break;
-        }
-    }
-
-private:
     sigc::signal<void(std::string)> m_signal_alert;
 };
 
@@ -43,7 +27,7 @@ public:
     ~AlienAlerter() = default;
     void onAlert(std::string strAlert) {
         std::cout << strAlert << std::endl;
-        std::cout << signal_waring.emit("please run away!!") << std::endl;
+        m_signal_waring.emit("please run away!!");
     }
 
     enum class ConnectorType{
@@ -52,40 +36,25 @@ public:
         TYPE_3
     };
 
-    sigc::signal<std::string(std::string)>& getConnector(ConnectorType type) {
-        switch(type)
-        {
-        case ConnectorType::TYPE_1:
-            return signal_waring;
-            break;
-        case ConnectorType::TYPE_2:
-            return signal_waring;
-            break;
-        case ConnectorType::TYPE_3:
-            return signal_waring;
-            break;
-        }
-    }
-
-private:
-    sigc::signal<std::string(std::string)> signal_waring;
+    sigc::signal <void(std::string)> m_signal_waring;
 };
 
 class People {
 public:
     People() = default;
     ~People() = default;
-    std::string onWarning(std::string str)
+    void onWarning(std::string str)
     {
         std::cout << str << std::endl;
-        return "We are OK!";
+        std::cout << "We are OK!" << std::endl;
     }
 
-    std::string onAtShelter(std::string str)
+    void onAtShelter(std::string str)
     {
         std::cout << str << std::endl;
-        return "We are alive!";
+        std::cout << "We are alive!" << std::endl;
     }
+
 };
 
 // detector --> AlienDetector::appear --> AlienAlerter::alert --> People::onWarning
@@ -95,9 +64,9 @@ int main()
     AlienAlerter myalerter;
     People people;
 
-    mydetector.getConnector(AlienDetector::ConnectorType::TYPE_1).connect( sigc::mem_fun(myalerter, &AlienAlerter::onAlert));
-    myalerter.getConnector(AlienAlerter::ConnectorType::TYPE_1).connect( sigc::mem_fun(people, &People::onWarning) ); // this is nt called.
-    myalerter.getConnector(AlienAlerter::ConnectorType::TYPE_1).connect( sigc::mem_fun(people, &People::onAtShelter) ); // this will be called. signal only has one slot
+    mydetector.m_signal_alert.connect( sigc::mem_fun(myalerter, &AlienAlerter::onAlert));
+    myalerter.m_signal_waring.connect( sigc::mem_fun(people, &People::onWarning) ); // this is nt called.
+    myalerter.m_signal_waring.connect( sigc::mem_fun(people, &People::onAtShelter) ); // this will be called. signal only has one slot
 
     mydetector.appear();
 
